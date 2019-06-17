@@ -2,7 +2,7 @@
   "name": "log-tool",
   "version": "1.0.0",
   "description": "Log tool for logging graphs",
-  "homepage": "https://github.com/shubhamkokul/LogTool.gi",
+  "homepage": "https://github.com/aworley16/LogTool",
   "author": "Shubham Kokul <shubhamkokul@gmail.com>",
   "keywords": [
     "angular",
