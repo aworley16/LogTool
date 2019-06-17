@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ImportDataComponent } from '../import-data/import-data.component';
+import { ImportDataComponent ,  ModalContentComponent} from '../import-data/import-data.component';
 import {IndexFileStoreService} from '../../index-file-store.service';
 import {RouteDataTransferService} from '../../route-data-transfer.service';
-import {DemoModalServiceStaticComponent} from '../../demo-modal-service-static/demo-modal-service-static.component';
+import {BsModalRef, BsModalService, ModalModule, ModalDirective } from 'ngx-bootstrap';
+import {combineLatest, Subscription} from 'rxjs';
+
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,8 @@ export class HomeComponent implements OnInit {
   ySelectorList: any = [];
   timeSeriesLineElement: any = [];
   temp: any;
-  constructor(private router: Router,  private dialog: MatDialog, private indexFileStore: IndexFileStoreService, private routeDataTransfer: RouteDataTransferService) { }
+  bsModalRef: BsModalRef;
+  constructor(private router: Router,  private dialog: MatDialog, private indexFileStore: IndexFileStoreService, private routeDataTransfer: RouteDataTransferService,  private modalService: BsModalService) { }
 
 
   ngOnInit() {
@@ -73,10 +76,24 @@ export class HomeComponent implements OnInit {
     });
   }
   onImport() {
-    this.dataFromDialog = [];
+
+    this.bsModalRef = this.modalService.show(ImportDataComponent, {class: 'my-modal'});
+
+    this.bsModalRef.content.closeBtnName = 'Close';
+
+  }
+
+
+   close() {
+     this.bsModalRef.hide();
+   }
+   /* this.dataFromDialog = [];
     this.columnsXandY = [];
-    this.timeSeriesY = [];
-      const dialogRef =  this.dialog.open(ImportDataComponent);
+    this.timeSeriesY = [];*/
+
+
+
+     /* const dialogRef =  this.dialog.open(ModalContentComponent);
       dialogRef.afterClosed().subscribe( () => {
         this.indexFileStore.viewDataDB().then(result => {
           this.dataFromDialog = result;
@@ -115,8 +132,8 @@ export class HomeComponent implements OnInit {
           });
 
         });
-      });
-  }
+      });*/
+  //}
   navigation(formData) {
       if (formData.graph === '' || formData.graph === undefined) {
         alert('Please select Graph type');
@@ -182,6 +199,10 @@ export class HomeComponent implements OnInit {
           value: event.target.value,
           name: this.timeSeriesY[event.target.options.selectedIndex].name
         });
+  }
+
+  openModalWithComponent() {
+
   }
 }
 

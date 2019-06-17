@@ -28,9 +28,20 @@ table {
   width: 100%;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
+
+th{
+border: 2px solid black;
+  text-align: center;
+  vertical-align: middle;
+padding: 8px;
+background-color: dimgrey;
+}
+
+td {
+  border: 1px solid black;
+  background-color: lightgray;
+  text-align: center;
+  vertical-align: middle;
   padding: 8px;
 }
 
@@ -38,16 +49,19 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 .file-area {
-  width: 50%;
+  width: 70%;
   margin: auto;
+  height: 100%;
+  max-height: 100px;
   position: center;
   border: dashed;
 
 
   input[type=file] {
-    position: relative;
+    position: absolute;
+    box-sizing : border-box;
     width: 100%;
-    height: 20%;
+    height: 100%;
     top: 0;
     left: 0;
     right: 0;
@@ -58,7 +72,7 @@ tr:nth-child(even) {
 
   .file-dummy {
     width: 100%;
-    padding: 30px;
+    //padding: 30px;
     background: rgba(255,255,255,0.2);
     border: 2px dashed rgba(255,255,255,0.2);
     text-align: center;
@@ -95,15 +109,33 @@ tr:nth-child(even) {
   top:5%;
 }
 
+.modal-dialog.my-modal{
+  //border-radius:32px 32px 0 0 !important;
+}
+
 .my-modal {
-  border: solid 4px blue;
-  max-width: 1000px;
+  //border: solid 4px black;
+  max-width: 960px;
+  background-color:darkseagreen;
+  border-radius:32px 32px 32px 32px;
+  min-height: 30px;
 }
 
 .my-modal .modal-header {
-  background-color: white;
+  background-color: Purple;
 }
 
-.my-modal .modal-body {
-  background-color: orange;
+.my-modal .modal-content {
+  background-color:darkseagreen;
+  border-radius:32px 32px 32px 32px;
+}
+
+input[type=checkbox] {
+  -webkit-transform: scale(2);
+}
+
+
+.andrew{
+  background-color: white;
+  border: solid 4px black
 }

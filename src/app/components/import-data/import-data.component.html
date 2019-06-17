@@ -1,13 +1,52 @@
-<div class="container">
-  <header class="model-layout__header">Import</header>
-<div class="form-group file-area">
-  <input type="file" name="images" id="images" required="required" multiple="multiple" (change)="onChange($event)"/>
-  <div class="file-dummy">
-    <div class="success">{{fileName}}</div>
-    <div class="default">Please select some files</div>
+<!--<div class="andrew" style="background-color: #2196F3; border-radius:32px 32px 0 0">-->
+<!-- Title and 'x' close button-->
+
+<div class="container-fluid" style="background-color: darkseagreen; border-radius:32px 32px 0 0; ">
+  <div class="row" style="top:20px;">
+    <div class="col-sm-6" style="text-align:left;">
+      <h2>Import A Data File</h2>
+    </div>
+    <div class="col-sm-6" style="text-align: right">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+    <div class="form-group file-area">
+
+
+      <div class="file-dummy" >
+        <input type="file" name="images" id="images" required="required" multiple="multiple" (change)="onChange($event)"/>
+         <div class="success" *ngIf="filled">{{fileName}}</div>
+         <div class="default" *ngIf="!filled">Click to Upload a File</div>
+      </div>
+
+    </div>
+    </div>
   </div>
 </div>
-<table>
+
+<br>
+
+<div class="row" *ngIf="filled">
+   <div class ="col" style="padding-right:-10px">
+      <button (click)="applyRename()" class="float-right">Rename</button>
+   </div>
+
+   <div class ="col" style="padding-right:0">
+      <input id="ailis_box" type="text" class="float-left">
+   </div>
+</div>
+
+<br>
+
+<!--data display && row renaming-->
+
+<table id="metaData" *ngIf="filled" style="border:thick">
+
   <tr>
     <th>Start Time</th>
     <th>End Time</th>
@@ -20,34 +59,44 @@
     <td>{{data_count}}</td>
     <td>{{number_columns}}</td>
   </tr>
-</table>
+</table >
   <br>
-  <form #formElement="ngForm" (ngSubmit)="submitCheckBox(formElement.value)">
+
+<form #formElement="ngForm" id="form1" (ngSubmit)="submitCheckBox(formElement.value)" style="padding-bottom: 50px;" *ngIf="filled" >
   <table>
+    <colgroup>
+      <col style="background-color: grey" />
+    </colgroup>
     <tr>
       <th>
         Column Name
       </th>
       <th>
-        Rename
+        Rename (Optional)
       </th>
       <th>
-        Data
+        First Data Point
       </th>
       <th>
         Check box
       </th>
     </tr>
     <tr *ngFor="let head of header; let i = index" [attr.data-index]="i">
-      <td>{{head.name}}</td>
+      <th style="background-color: darkgrey ">{{head.name}}</th>
       <td><input type="text" (change)="columnNameChange($event)" value="{{head.name}}"></td>
       <td>{{readFirstRow[i]}}</td>
       <td><input type="checkbox" value="head.checked" [(ngModel)]="head.checked" name="{{head.id}}"></td>
     </tr>
   </table>
-    <div class="container">
-      <button class="btn" type="submit">Show</button>
-    </div>
   </form>
-  <button type="button" class="btn btn-primary" (click)="openModalWithComponent()">Create modal with component</button>
+<div class="container-fluid"*ngIf="filled">
+<div class="row">
+  <button form="form1" type="submit" style="position: relative; left:30%; bottom: 10px " >Show</button>
+  <button style="position:absolute; right:0;" (click)="close()" style="position: relative; left:60%; bottom: 10px">Cancel</button>
+
 </div>
+
+
+</div>
+
+

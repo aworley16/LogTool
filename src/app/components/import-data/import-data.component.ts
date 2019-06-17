@@ -1,17 +1,18 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import {Component, EventEmitter, OnInit, ViewEncapsulation} from '@angular/core';
 import * as d3 from 'd3';
 import {IndexFileStoreService} from '../../index-file-store.service';
-import {BsModalRef, BsModalService, ModalModule} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService, ModalDirective, ModalModule} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-import-data',
   templateUrl: './import-data.component.html',
-  styleUrls: ['./import-data.component.scss']
+  styleUrls: ['./import-data.component2.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ImportDataComponent implements OnInit {
 
   fileName: any;
+  ailis: string;
   fileContent: any = '';
   header = [];
   start: any;
@@ -20,11 +21,20 @@ export class ImportDataComponent implements OnInit {
   number_columns;
   readFirstRow: any;
   fileCsvRead = [];
-  bsModalRef: BsModalRef;
+  filled = false;
+  filled2 = false;
+  // bsModalRef: BsModalRef;
   // constructor(private dialog: MatDialogRef<ImportDataComponent>, private indexFileStore: IndexFileStoreService) {}
-  constructor( private indexFileStore: IndexFileStoreService,   private modalService: BsModalService) {}
+  constructor( private indexFileStore: IndexFileStoreService,   private modalService: BsModalService, private bsModalRef: BsModalRef) {}
   ngOnInit() {
       this.fileName = 'Please select a file to upload';
+  }
+  ngOnInit() {
+      this.fileName = 'Please select a file to upload';
+  }
+  file_rename(name){
+     this.ailis = name;
+     console.log(this.ailis);
   }
 
   onChange(event) {
@@ -68,6 +78,8 @@ export class ImportDataComponent implements OnInit {
         me.data_count = me.fileContent.length;
         me.number_columns = me.header.length;
     };
+    this.filled = true;
+    console.log(this.fileName);
   }
 
   submitCheckBox(formData) {
@@ -118,31 +130,34 @@ export class ImportDataComponent implements OnInit {
   openModalWithComponent() {
     const initialState = {
 
-      list: [
-        'Open a modal with component',
-        'Pass your data',
-        'Do something else',
-        '...'
-      ],
-      title: 'Import File',
-      filename: 'Upload a file',
+      filename: 'DOOM',
     };
 
-    this.bsModalRef = this.modalService.show(ModalContentComponent, {initialState, class: "my-modal"});
+    this.bsModalRef = this.modalService.show( {initialState, class: "my-modal"});
     this.bsModalRef.content.closeBtnName = 'Close';
   }
+
+  close(){
+    this.bsModalRef.hide();
+  }
+
+
 }
+
+//remove from angular.modules
 
 // ---------------Code for popup Modal -------------------------------------------------------------
 @Component({
   selector: 'app-modal-content',
-  templateUrl: './ngx-template.html',
+  templateUrl: './import-data.component.html', //'./ngx-template.html',
   styleUrls: ['./import-data.component2.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
 
 export class ModalContentComponent implements OnInit {
+/*
+
   title: string;
   closeBtnName: string;
   fileName: any;
@@ -198,8 +213,54 @@ export class ModalContentComponent implements OnInit {
     };
   }
 
+  submitCheckBox(formData) {
+    const formDataVariable = [];
+    const dataArrayColumns = [];
+    const selectedHeader = [];
+    for (let i = 0; i < this.header.length; i++) {
+      if (formData[i]) {
+        formDataVariable.push(i);
+      }
+    }
+    for (let z = 0; z < formDataVariable.length; z++) {
+      const temp = [];
+      for (let i = 1; i < this.fileCsvRead.length; i++) {
+        const initialSplit = this.fileCsvRead[i].split(',');
+        for (let j = 0; j < initialSplit.length; j++) {
+          if (j === formDataVariable[z]) {
+            temp.push(initialSplit[j]);
+          }
+        }
+      }
+      dataArrayColumns.push(temp);
+    }
+    for (let i = 0; i < this.header.length; i ++) {
+      if (this.header[i].checked) {
+        selectedHeader.push({
+          headerName: this.header[i].name,
+          field: this.header[i].name,
+          editable: true
+        });
+      }
+
+    }
+    this.indexFileStore.addIntoDB(this.fileName, this.fileContent, dataArrayColumns,
+      this.header, selectedHeader, this.fileContent.columns, this.start, this.end, '', this.data_count, this.number_columns, '');
+    /!*   setTimeout( () => {
+         this.dialog.close();
+         console.log('Send Data');
+       }, 2000);*!/
+
+  }
+
+  columnNameChange(event) {
+    console.log(event);
+  }
+
   // important allows modal to be closed
-  constructor(public bsModalRef: BsModalRef) {}
+  constructor( private indexFileStore: IndexFileStoreService, public bsModalRef: BsModalRef) {}
+
+*/
 
   ngOnInit() {}
 }
