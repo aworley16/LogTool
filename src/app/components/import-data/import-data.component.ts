@@ -29,9 +29,7 @@ export class ImportDataComponent implements OnInit {
   ngOnInit() {
       this.fileName = 'Please select a file to upload';
   }
-  ngOnInit() {
-      this.fileName = 'Please select a file to upload';
-  }
+
   file_rename(name){
      this.ailis = name;
      console.log(this.ailis);
