@@ -35,8 +35,9 @@ td, th {
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: white;
 }
+
 .file-area {
   width: 100%;
   position: relative;
@@ -104,4 +105,10 @@ tr:nth-child(even) {
 
 .my-modal .modal-body {
   background-color: orange;
+}
+
+.container-fluid{
+
+
+
 }

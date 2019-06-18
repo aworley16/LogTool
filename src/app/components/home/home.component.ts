@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { ImportDataComponent ,  ModalContentComponent} from '../import-data/import-data.component';
+import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {ImportDataComponent} from '../import-data/import-data.component';
 import {IndexFileStoreService} from '../../index-file-store.service';
 import {RouteDataTransferService} from '../../route-data-transfer.service';
-import {BsModalRef, BsModalService, ModalModule, ModalDirective } from 'ngx-bootstrap';
+import {BsModalRef, BsModalService, ModalModule, ModalDirective} from 'ngx-bootstrap';
 import {combineLatest, Subscription} from 'rxjs';
 
 
@@ -25,7 +25,9 @@ export class HomeComponent implements OnInit {
   timeSeriesLineElement: any = [];
   temp: any;
   bsModalRef: BsModalRef;
-  constructor(private router: Router,  private dialog: MatDialog, private indexFileStore: IndexFileStoreService, private routeDataTransfer: RouteDataTransferService,  private modalService: BsModalService) { }
+
+  constructor(private router: Router, private indexFileStore: IndexFileStoreService, private routeDataTransfer: RouteDataTransferService, private modalService: BsModalService) {
+  }
 
 
   ngOnInit() {
@@ -38,7 +40,7 @@ export class HomeComponent implements OnInit {
       } else {
         this.tabs = [];
         for (let i = 0; i < this.dataFromDialog.length; i++) {
-          this.tabs.push( {
+          this.tabs.push({
             name: this.dataFromDialog[i].name,
             id: i
           });
@@ -55,120 +57,124 @@ export class HomeComponent implements OnInit {
             }
 
             if (isNaN(this.dataFromDialog[i].dataArrayColumns[j][0]) && Date.parse(this.dataFromDialog[i].dataArrayColumns[j][0])) {
-                    this.timeSeriesY.push({
-                      name:filename + '-' + columnName,
-                      identifier: `${i}, ${j}`
-                    })
+              this.timeSeriesY.push({
+                name: filename + '-' + columnName,
+                identifier: `${i}, ${j}`
+              });
             }
           }
         }
 
         this.sendingValue = 0;
+
         this.router.navigateByUrl('/table-data', {skipLocationChange: true}).then(() => {
           this.sendingValue = this.dataFromDialog.length - 1;
-          this.router.navigate(['/table-data'], {queryParams: {
+          this.router.navigate(['/table-data'], {
+            queryParams: {
               value: this.sendingValue
-            }});
+            }
+          });
         });
       }
     }, error => {
       console.log(error);
     });
   }
+
   onImport() {
 
-    this.bsModalRef = this.modalService.show(ImportDataComponent, {class: 'my-modal'});
-
+    this.bsModalRef = this.modalService.show(ImportDataComponent, {class: 'my-modal', ignoreBackdropClick: true});
     this.bsModalRef.content.closeBtnName = 'Close';
+    /* const dialogRef =  this.dialog.open(ModalContentComponent);
+    dialogRef.afterClosed().subscribe( () =>
+    */
 
-  }
+    this.modalService.onHide.subscribe(() => {
+      this.indexFileStore.viewDataDB().then(result => {
+        this.dataFromDialog = result;
+        this.tabs = [];
+        for (let i = 0; i < this.dataFromDialog.length; i++) {
+          this.tabs.push({
+            name: this.dataFromDialog[i].name,
+            id: i
+          });
+        }
+        for (let i = 0; i < this.tabs.length; i++) {
+          const filename = this.tabs[i].name;
+          for (let j = 0; j < this.dataFromDialog[i].selectedHeader.length; j++) {
+            const columnName = this.dataFromDialog[i].selectedHeader[j].headerName;
+            if (!isNaN(this.dataFromDialog[i].dataArrayColumns[j][0]) && !Date.parse(this.dataFromDialog[i].dataArrayColumns[j][0])) {
+              this.columnsXandY.push({
+                name: filename + '-' + columnName,
+                identifier: `${i}, ${j}`
+              });
+            }
 
-
-   close() {
-     this.bsModalRef.hide();
-   }
-   /* this.dataFromDialog = [];
-    this.columnsXandY = [];
-    this.timeSeriesY = [];*/
-
-
-
-     /* const dialogRef =  this.dialog.open(ModalContentComponent);
-      dialogRef.afterClosed().subscribe( () => {
-        this.indexFileStore.viewDataDB().then(result => {
-          this.dataFromDialog = result;
-          this.tabs = [];
-          for (let i = 0; i < this.dataFromDialog.length; i++) {
-            this.tabs.push({
-              name: this.dataFromDialog[i].name,
-              id: i
-            });
-          }
-          for (let i = 0; i < this.tabs.length; i++) {
-            const filename = this.tabs[i].name;
-            for (let j = 0; j < this.dataFromDialog[i].selectedHeader.length; j++) {
-              const columnName = this.dataFromDialog[i].selectedHeader[j].headerName;
-              if (!isNaN(this.dataFromDialog[i].dataArrayColumns[j][0]) && !Date.parse(this.dataFromDialog[i].dataArrayColumns[j][0])) {
-                this.columnsXandY.push({
-                  name: filename + '-' + columnName,
-                  identifier: `${i}, ${j}`
-                });
-              }
-
-              if (isNaN(this.dataFromDialog[i].dataArrayColumns[j][0]) && Date.parse(this.dataFromDialog[i].dataArrayColumns[j][0])) {
-                this.timeSeriesY.push({
-                  name:filename + '-' + columnName,
-                  identifier: `${i}, ${j}`
-                })
-              }
+            if (isNaN(this.dataFromDialog[i].dataArrayColumns[j][0]) && Date.parse(this.dataFromDialog[i].dataArrayColumns[j][0])) {
+              this.timeSeriesY.push({
+                name: filename + '-' + columnName,
+                identifier: `${i}, ${j}`
+              });
             }
           }
+        }
+        this.sendingValue = this.dataFromDialog.length - 1;
+        this.router.navigateByUrl('/table-data', {skipLocationChange: true}).then(() => {
           this.sendingValue = this.dataFromDialog.length - 1;
-          this.router.navigateByUrl('/table-data', {skipLocationChange: true}).then(() => {
-            this.sendingValue = this.dataFromDialog.length - 1;
-            this.router.navigate(['/table-data'], {queryParams: {
-                value: this.sendingValue
-              }});
+          this.router.navigate(['/table-data'], {
+            queryParams: {
+              value: this.sendingValue
+            }
           });
-
         });
-      });*/
-  //}
-  navigation(formData) {
-      if (formData.graph === '' || formData.graph === undefined) {
-        alert('Please select Graph type');
-      } else if (formData.graph === 'line_graph') {
-        this.routeDataTransfer.storage = {
-          value: this.ySelectorList,
-          timeSeries: this.timeSeriesLineElement
-        };
-        this.router.navigate(['/line-graph']);
-      } else if (formData.graph === 'scatter_graph') {
-        this.routeDataTransfer.storage = {
-          value: this.ySelectorList,
-          timeSeries: this.timeSeriesLineElement
-        };
-        this.router.navigate(['/scatter-graph']);
-      }
-  }
-  changeDisplayTable(value) {
-    this.router.navigateByUrl('/table-data', {skipLocationChange: true}).then(() => {
-      this.sendingValue = value;
-      this.router.navigate(['/table-data'], {queryParams: {
-          value: this.sendingValue
-        }});
+
+      });
+
     });
   }
 
+  //}
+  //Unchanged
+  navigation(formData) {
+    if (formData.graph === '' || formData.graph === undefined) {
+      alert('Please select Graph type');
+    } else if (formData.graph === 'line_graph') {
+      this.routeDataTransfer.storage = {
+        value: this.ySelectorList,
+        timeSeries: this.timeSeriesLineElement
+      };
+      this.router.navigate(['/line-graph']);
+    } else if (formData.graph === 'scatter_graph') {
+      this.routeDataTransfer.storage = {
+        value: this.ySelectorList,
+        timeSeries: this.timeSeriesLineElement
+      };
+      this.router.navigate(['/scatter-graph']);
+    }
+  }
+
+  //Unchanged
+  changeDisplayTable(value) {
+    this.router.navigateByUrl('/table-data', {skipLocationChange: true}).then(() => {
+      this.sendingValue = value;
+      this.router.navigate(['/table-data'], {
+        queryParams: {
+          value: this.sendingValue
+        }
+      });
+    });
+  }
+
+  //Unchanged
   checkboxSelect(event) {
     if (event.target.value === 'line_graph') {
       this.show = true;
-    }
-    else if (event.target.value === 'scatter_graph') {
+    } else if (event.target.value === 'scatter_graph') {
       this.show = false;
     }
   }
 
+  //Unchanged
   ySelector(event) {
     this.ySelectorList.push({
       name: this.columnsXandY[event.target.options.selectedIndex].name,
@@ -176,13 +182,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  //Unchanged
   removeFromListLine(event) {
-    for (let i = 0; i<this.ySelectorList.length; i++) {
-      if(this.ySelectorList[i].name === event.target.innerText) {
+    for (let i = 0; i < this.ySelectorList.length; i++) {
+      if (this.ySelectorList[i].name === event.target.innerText) {
         if (i === 0) {
           this.ySelectorList.shift();
           break;
-        } else if(this.ySelectorList.length === 1) {
+        } else if (this.ySelectorList.length === 1) {
           this.ySelectorList.pop();
           break;
         } else {
@@ -193,17 +200,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  //Unchanged
   timeSeriesLineY(event) {
     this.timeSeriesLineElement.pop();
-        this.timeSeriesLineElement.push({
-          value: event.target.value,
-          name: this.timeSeriesY[event.target.options.selectedIndex].name
-        });
-  }
-
-  openModalWithComponent() {
-
+    this.timeSeriesLineElement.push({
+      value: event.target.value,
+      name: this.timeSeriesY[event.target.options.selectedIndex].name
+    });
   }
 }
-
-

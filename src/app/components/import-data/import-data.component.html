@@ -1,10 +1,9 @@
-<!--<div class="andrew" style="background-color: #2196F3; border-radius:32px 32px 0 0">-->
-<!-- Title and 'x' close button-->
+
 
 <div class="container-fluid" style="background-color: darkseagreen; border-radius:32px 32px 0 0; ">
   <div class="row" style="top:20px;">
     <div class="col-sm-6" style="text-align:left;">
-      <h2>Import A Data File</h2>
+      <h2>Import</h2>
     </div>
     <div class="col-sm-6" style="text-align: right">
       <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
@@ -50,8 +49,8 @@
   <tr>
     <th>Start Time</th>
     <th>End Time</th>
-    <th>Data Count</th>
-    <th>Number of Columns</th>
+    <th>Number of Samples</th>
+    <th>Columns per Sample</th>
   </tr>
   <tr>
     <td>{{start}}</td>
@@ -63,7 +62,7 @@
   <br>
 
 <form #formElement="ngForm" id="form1" (ngSubmit)="submitCheckBox(formElement.value)" style="padding-bottom: 50px;" *ngIf="filled" >
-  <table>
+  <table style="border-radius: 32px">
     <colgroup>
       <col style="background-color: grey" />
     </colgroup>
@@ -75,14 +74,14 @@
         Rename (Optional)
       </th>
       <th>
-        First Data Point
+        First Sample
       </th>
       <th>
-        Check box
+        Selected
       </th>
     </tr>
     <tr *ngFor="let head of header; let i = index" [attr.data-index]="i">
-      <th style="background-color: darkgrey ">{{head.name}}</th>
+      <th style="background-color: saddlebrown">{{head.name}}</th>
       <td><input type="text" (change)="columnNameChange($event)" value="{{head.name}}"></td>
       <td>{{readFirstRow[i]}}</td>
       <td><input type="checkbox" value="head.checked" [(ngModel)]="head.checked" name="{{head.id}}"></td>

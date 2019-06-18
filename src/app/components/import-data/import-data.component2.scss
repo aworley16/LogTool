@@ -21,11 +21,19 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+
+
 }
+
+
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: 95%;
+  margin-right: 2.5%;
+  margin-left: 2.5%;
 }
 
 
@@ -34,7 +42,7 @@ border: 2px solid black;
   text-align: center;
   vertical-align: middle;
 padding: 8px;
-background-color: dimgrey;
+background-color: #8B3626;
 }
 
 td {
@@ -48,6 +56,7 @@ td {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
 .file-area {
   width: 70%;
   margin: auto;
@@ -135,7 +144,3 @@ input[type=checkbox] {
 }
 
 
-.andrew{
-  background-color: white;
-  border: solid 4px black
-}
